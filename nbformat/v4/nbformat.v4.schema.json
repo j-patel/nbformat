@@ -59,23 +59,6 @@
                     "description": "Original notebook format (major number) before converting the notebook between versions. This should never be written to a file.",
                     "type": "integer",
                     "minimum": 1
-                },
-                "title": {
-                    "description": "The title of the notebook document",
-                    "type": "string"
-                },
-                "authors": {
-                    "description": "The author(s) of the notebook document",
-                    "type": "array",
-                    "item": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string"
-                        }
-                      },
-                      "additionalProperties": true
-                    }
                 }
             }
         },
@@ -163,7 +146,7 @@
             "description": "Notebook code cell.",
             "type": "object",
             "additionalProperties": false,
-            "required": ["cell_type", "metadata", "source", "outputs", "execution_count"],
+            "required": ["cell_type", "metadata", "source", "outputs", "execution_count","cell_uuid"],
             "properties": {
                 "cell_type": {
                     "description": "String identifying the type of cell.",
@@ -194,12 +177,15 @@
                 },
                 "execution_count": {
                     "description": "The code cell's prompt number. Will be null if the cell has not been run.",
-                    "type": ["integer", "null"],
-                    "minimum": 0
+                    "type": ["string", "null"]
+                },
+                "cell_uuid": {
+                    "description": "The code cell's uuid.",
+                    "type": ["string", "null"]
                 }
             }
         },
-
+        
         "unrecognized_cell": {
             "description": "Unrecognized cell from a future minor-revision to the notebook format.",
             "type": "object",
@@ -223,7 +209,7 @@
                 }
             }
         },
-
+        
         "output": {
             "type": "object",
             "oneOf": [
@@ -246,8 +232,7 @@
                 },
                 "execution_count": {
                     "description": "A result's prompt number.",
-                    "type": ["integer", "null"],
-                    "minimum": 0
+                    "type": ["string", "null"]
                 },
                 "data": {"$ref": "#/definitions/misc/mimebundle"},
                 "metadata": {"$ref": "#/definitions/misc/output_metadata"}
@@ -333,7 +318,7 @@
 
         "misc": {
             "metadata_name": {
-                "description": "The cell's name. If present, must be a non-empty string. Must be unique across all the cells of a given notebook.",
+                "description": "The cell's name. If present, must be a non-empty string.",
                 "type": "string",
                 "pattern": "^.+$"
             },
@@ -362,20 +347,25 @@
             },
             "execution_count": {
                 "description": "The code cell's prompt number. Will be null if the cell has not been run.",
-                "type": ["integer", "null"],
-                "minimum": 0
+                "type": ["string", "null"]
+            },
+            "cell_uuid": {
+                "description": "The code cell's uuid.",
+                "type": ["string", "null"]
             },
             "mimebundle": {
                 "description": "A mime-type keyed dictionary of data",
                 "type": "object",
-                "additionalProperties": {
-                  "description": "mimetype output (e.g. text/plain), represented as either an array of strings or a string.",
-                  "$ref": "#/definitions/misc/multiline_string"
+                "additionalProperties": false,
+                "properties": {
+                    "application/json": {
+                        "type": "object"
+                    }
                 },
                 "patternProperties": {
-                    "^application/([a-zA-Z0-9.]+\\+)?json$": {
-                        "description": "Mimetypes with JSON output, can be an object",
-                        "type": "object"
+                    "^(?!application/json$)[a-zA-Z0-9]+/[a-zA-Z0-9\\-\\+\\.]+$": {
+                        "description": "mimetype output (e.g. text/plain), represented as either an array of strings or a string.",
+                        "$ref": "#/definitions/misc/multiline_string"
                     }
                 }
             },
