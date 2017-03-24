@@ -194,8 +194,7 @@
                 },
                 "execution_count": {
                     "description": "The code cell's prompt number. Will be null if the cell has not been run.",
-                    "type": ["string", "null"],
-                    "minimum": 0
+                    "type": ["string", "null"]
                 },
                 "cell_uuid": {
                     "description": "The code cell's uuid.",
@@ -250,8 +249,7 @@
                 },
                 "execution_count": {
                     "description": "A result's prompt number.",
-                    "type": ["string", "null"],
-                    "minimum": 0
+                    "type": ["string", "null"]
                 },
                 "data": {"$ref": "#/definitions/misc/mimebundle"},
                 "metadata": {"$ref": "#/definitions/misc/output_metadata"}
@@ -366,8 +364,7 @@
             },
             "execution_count": {
                 "description": "The code cell's prompt number. Will be null if the cell has not been run.",
-                "type": ["string", "null"],
-                "minimum": 0
+                "type": ["string", "null"]
             },
             "cell_uuid": {
                 "description": "The code cell's uuid.",
